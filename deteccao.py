@@ -1,7 +1,6 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-from numpy import ndarray
 
 # Definindo a largura e altura da imagem
 WIDTH = 640
@@ -22,7 +21,7 @@ camera.set(cv2.CAP_PROP_FRAME_HEIGHT, HEIGHT)
 
 def encontra_coordenadas_maos(
     img: np.ndarray,
-) -> tuple[ndarray, list[dict[str, list[tuple[int, int, int]]]]]:
+) -> tuple[np.ndarray, list[dict[str, list[tuple[int, int, int]]]]]:
     """
     Função que encontra as coordenadas das mãos na imagem
     :param img: imagem capturada pela câmera
@@ -63,7 +62,7 @@ def encontra_coordenadas_maos(
     return img, todas_maos
 
 
-def dedos_levantados(mao: dict[str, list[tuple[int, int, int]]]) -> List[bool]:
+def dedos_levantados(mao: dict[str, list[tuple[int, int, int]]]) -> list[bool]:
     dedos = []
     for ponta_dedo in [8, 12, 16, 20]:
         verifica_dedo = False
