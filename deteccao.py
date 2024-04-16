@@ -1,3 +1,5 @@
+import os
+
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -5,6 +7,11 @@ import numpy as np
 # Definindo a largura e altura da imagem
 WIDTH = 640
 HEIGHT = 480
+
+# Definindo uma variável que checa se o programa Bloco de Notas está aberto
+bloco_notas_aberto = False
+chrome_aberto = False
+calculadora_aberta = False
 
 # Carregando os módulos de detecção de mãos e desenho
 mp_maos = mp.solutions.hands
@@ -98,7 +105,17 @@ while True:
 
     if len(todas_maos) == 1:
         info_dedos_mao1 = dedos_levantados(todas_maos[0])
-        print(info_dedos_mao1)
+
+        # Abrindo o Bloco de Notas, Chrome e Calculadora de acordo com a posição dos dedos
+        if info_dedos_mao1 == [True, False, False, False] and not bloco_notas_aberto:
+            bloco_notas_aberto = True
+            os.startfile(r"C:\WINDOWS\system32\notepad.exe")
+        if info_dedos_mao1 == [True, True, False, False] and not chrome_aberto:
+            chrome_aberto = True
+            os.startfile(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe")
+        if info_dedos_mao1 == [True, True, True, False] and not calculadora_aberta:
+            calculadora_aberta = True
+            os.startfile(r"C:\WINDOWS\system32\calc.exe")
 
     cv2.imshow("Imagem", imagem)
 
