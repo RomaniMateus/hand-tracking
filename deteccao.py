@@ -22,7 +22,7 @@ camera.set(cv2.CAP_PROP_FRAME_HEIGHT, HEIGHT)
 
 def encontra_coordenadas_maos(
     img: np.ndarray,
-) -> tuple[ndarray, list[list[tuple[int, int, int]]]]:
+) -> tuple[ndarray, list[dict[str, list[tuple[int, int, int]]]]]:
     """
     Função que encontra as coordenadas das mãos na imagem
     :param img: imagem capturada pela câmera
