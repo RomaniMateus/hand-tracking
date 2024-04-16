@@ -63,6 +63,19 @@ def encontra_coordenadas_maos(
     return img, todas_maos
 
 
+def dedos_levantados(mao: dict[str, list[tuple[int, int, int]]]) -> List[bool]:
+    dedos = []
+    for ponta_dedo in [8, 12, 16, 20]:
+        verifica_dedo = False
+
+        if mao["coordenadas"][ponta_dedo][1] < mao["coordenadas"][ponta_dedo - 2][1]:
+            verifica_dedo = True
+
+        dedos.append(verifica_dedo)
+
+    return dedos
+
+
 # Laço de repetição para capturar a imagem da câmera e exibir na tela
 while True:
     sucesso, imagem = camera.read()
@@ -74,6 +87,10 @@ while True:
         break
 
     (imagem, todas_maos) = encontra_coordenadas_maos(imagem)
+
+    if len(todas_maos) == 1:
+        info_dedos_mao1 = dedos_levantados(todas_maos[0])
+        print(info_dedos_mao1)
 
     cv2.imshow("Imagem", imagem)
 
