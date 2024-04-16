@@ -43,7 +43,10 @@ def encontra_coordenadas_maos(
     # Desenha as marcações das mãos na imagem, caso existam
     todas_maos = []
     if resultado.multi_hand_landmarks:
-        for marcacao_maos in resultado.multi_hand_landmarks:
+
+        for lado_mao, marcacao_maos in zip(
+            resultado.multi_handedness, resultado.multi_hand_landmarks
+        ):
             info_mao = {}
             coordenadas = []
             for marcacao in marcacao_maos.landmark:
