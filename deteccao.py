@@ -65,6 +65,9 @@ def encontra_coordenadas_maos(
 while True:
     sucesso, imagem = camera.read()
 
+    # Espelha a imagem horizontalmente
+    imagem = cv2.flip(imagem, 1)
+
     if not sucesso:
         break
 
