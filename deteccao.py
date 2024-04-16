@@ -1,6 +1,9 @@
+from typing import Tuple, List
+
 import cv2
 import mediapipe as mp
 import numpy as np
+from numpy import ndarray
 
 # Definindo a largura e altura da imagem
 WIDTH = 640
@@ -19,11 +22,13 @@ camera.set(cv2.CAP_PROP_FRAME_WIDTH, WIDTH)
 camera.set(cv2.CAP_PROP_FRAME_HEIGHT, HEIGHT)
 
 
-def encontra_coordenadas_maos(img: np.ndarray) -> np.ndarray:
+def encontra_coordenadas_maos(
+    img: np.ndarray,
+) -> tuple[ndarray, list[list[tuple[int, int, int]]]]:
     """
     Função que encontra as coordenadas das mãos na imagem
-    :param img: Imagem de entrada
-    :return: Imagem com as marcações das mãos
+    :param img: imagem capturada pela câmera
+    :return: imagem com as marcações das mãos e as coordenadas convertidas em píxeis.
     """
 
     # O módulo de detecção de mãos do MediaPipe espera uma imagem no formato RGB
@@ -36,8 +41,11 @@ def encontra_coordenadas_maos(img: np.ndarray) -> np.ndarray:
     resultado = maos.process(imagem_rgb)
 
     # Desenha as marcações das mãos na imagem, caso existam
+    todas_maos = []
     if resultado.multi_hand_landmarks:
         for marcacao_maos in resultado.multi_hand_landmarks:
+            info_mao = {}
+            coordenadas = []
             for marcacao in marcacao_maos.landmark:
                 # Convertendo e armazenando os valores das coordenadas x, y e z
                 coord_x, coord_y, coord_z = (
@@ -45,10 +53,12 @@ def encontra_coordenadas_maos(img: np.ndarray) -> np.ndarray:
                     int(marcacao.y * HEIGHT),
                     int(marcacao.z * WIDTH),
                 )
-                print(f"Coordenadas: x={coord_x}, y={coord_y}, z={coord_z}")
+                coordenadas.append((coord_x, coord_y, coord_z))
+                todas_maos.append(coordenadas)
+            info_mao["coordenadas"] = coordenadas
             mp_desenho.draw_landmarks(img, marcacao_maos, mp_maos.HAND_CONNECTIONS)
 
-    return img
+    return img, todas_maos
 
 
 # Laço de repetição para capturar a imagem da câmera e exibir na tela
@@ -58,7 +68,7 @@ while True:
     if not sucesso:
         break
 
-    imagem = encontra_coordenadas_maos(imagem)
+    (imagem, todas_maos) = encontra_coordenadas_maos(imagem)
 
     cv2.imshow("Imagem", imagem)
 
