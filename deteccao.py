@@ -45,7 +45,7 @@ def encontra_coordenadas_maos(
     resultado = maos.process(imagem_rgb)
 
     # Desenha as marcações das mãos na imagem, caso existam
-    todas_maos = []
+    todas_maos_info = []
     if resultado.multi_hand_landmarks:
 
         for lado_mao, marcacao_maos in zip(
@@ -63,17 +63,18 @@ def encontra_coordenadas_maos(
                 coordenadas.append((coord_x, coord_y, coord_z))
 
             info_mao["coordenadas"] = coordenadas
-            todas_maos.append(info_mao)
+            todas_maos_info.append(info_mao)
             mp_desenho.draw_landmarks(img, marcacao_maos, mp_maos.HAND_CONNECTIONS)
 
-    return img, todas_maos
+    return img, todas_maos_info
 
 
 def dedos_levantados(mao: dict[str, list[tuple[int, int, int]]]) -> list[bool]:
     """
-    Função que verifica quais dedos estão levantados (True) ou abaixados (False). Nesta função não consideramos o polegar.
-    :param mao: dicionário com as coordenadas dos pontos de referência da mão
-    :return: lista com os dedos levantados (True) ou abaixados (False)
+    Função que verifica quais dedos estão levantados (True) ou abaixados (False). Nesta função não consideramos o
+    polegar.
+    :param mao: dicionário com as coordenadas dos pontos de referência da mão :return: lista com os dedos
+    levantados (True) ou abaixados (False)
     """
     dedos = []
 
