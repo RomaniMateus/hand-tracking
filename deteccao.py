@@ -1,9 +1,10 @@
 import cv2
 import mediapipe as mp
+import numpy as np
 
 # Definindo a largura e altura da imagem
-WIDTH = 1920
-HEIGHT = 1080
+WIDTH = 640
+HEIGHT = 480
 
 # Carregando os módulos de detecção de mãos e desenho
 mp_maos = mp.solutions.hands
@@ -17,12 +18,16 @@ camera = cv2.VideoCapture(0)
 camera.set(cv2.CAP_PROP_FRAME_WIDTH, WIDTH)
 camera.set(cv2.CAP_PROP_FRAME_HEIGHT, HEIGHT)
 
-# Laço de repetição para capturar a imagem da câmera e exibir na tela
-while True:
-    sucesso, imagem = camera.read()
+
+def encontra_coordenadas_maos(img: np.ndarray) -> np.ndarray:
+    """
+    Função que encontra as coordenadas das mãos na imagem
+    :param img: Imagem de entrada
+    :return: Imagem com as marcações das mãos
+    """
 
     # O módulo de detecção de mãos do MediaPipe espera uma imagem no formato RGB
-    imagem_rgb = cv2.cvtColor(imagem, cv2.COLOR_BGR2RGB)
+    imagem_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     # Processa a imagem e retorna o resultado:
     # MULTI_HAND_LANDMARKS: informa as coordenadas normalizadas dos pontos da mão
@@ -33,10 +38,27 @@ while True:
     # Desenha as marcações das mãos na imagem, caso existam
     if resultado.multi_hand_landmarks:
         for marcacao_maos in resultado.multi_hand_landmarks:
-            mp_desenho.draw_landmarks(imagem, marcacao_maos, mp_maos.HAND_CONNECTIONS)
+            for marcacao in marcacao_maos.landmark:
+                # Convertendo e armazenando os valores das coordenadas x, y e z
+                coord_x, coord_y, coord_z = (
+                    int(marcacao.x * WIDTH),
+                    int(marcacao.y * HEIGHT),
+                    int(marcacao.z * WIDTH),
+                )
+                print(f"Coordenadas: x={coord_x}, y={coord_y}, z={coord_z}")
+            mp_desenho.draw_landmarks(img, marcacao_maos, mp_maos.HAND_CONNECTIONS)
+
+    return img
+
+
+# Laço de repetição para capturar a imagem da câmera e exibir na tela
+while True:
+    sucesso, imagem = camera.read()
 
     if not sucesso:
         break
+
+    imagem = encontra_coordenadas_maos(imagem)
 
     cv2.imshow("Imagem", imagem)
 
