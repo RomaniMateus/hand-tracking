@@ -73,7 +73,8 @@ def dedos_levantados(mao: dict[str, list[tuple[int, int, int]]]) -> list[bool]:
     """
     Função que verifica quais dedos estão levantados (True) ou abaixados (False). Nesta função não consideramos o
     polegar.
-    :param mao: dicionário com as coordenadas dos pontos de referência da mão :return: lista com os dedos
+    :param mao: dicionário com as coordenadas dos pontos de referência da mão
+    :return: lista com os dedos
     levantados (True) ou abaixados (False)
     """
     dedos = []
