@@ -1,5 +1,3 @@
-from typing import Tuple, List
-
 import cv2
 import mediapipe as mp
 import numpy as np
