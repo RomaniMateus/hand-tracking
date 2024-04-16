@@ -110,16 +110,22 @@ while True:
     if len(todas_maos) == 1:
         info_dedos_mao1 = dedos_levantados(todas_maos[0])
 
-        # Abrindo o Bloco de Notas, Chrome e Calculadora de acordo com a posição dos dedos
-        if info_dedos_mao1 == [True, False, False, False] and not bloco_notas_aberto:
-            bloco_notas_aberto = True
-            os.startfile(r"C:\WINDOWS\system32\notepad.exe")
-        if info_dedos_mao1 == [True, True, False, False] and not chrome_aberto:
-            chrome_aberto = True
-            os.startfile(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe")
-        if info_dedos_mao1 == [True, True, True, False] and not calculadora_aberta:
-            calculadora_aberta = True
-            os.startfile(r"C:\WINDOWS\system32\calc.exe")
+        if todas_maos[0]["lado"] == "Right":
+            # Abrindo o Bloco de Notas, Chrome e Calculadora de acordo com a posição dos dedos
+            if (
+                info_dedos_mao1 == [True, False, False, False]
+                and not bloco_notas_aberto
+            ):
+                bloco_notas_aberto = True
+                os.startfile(r"C:\WINDOWS\system32\notepad.exe")
+            if info_dedos_mao1 == [True, True, False, False] and not chrome_aberto:
+                chrome_aberto = True
+                os.startfile(
+                    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+                )
+            if info_dedos_mao1 == [True, True, True, False] and not calculadora_aberta:
+                calculadora_aberta = True
+                os.startfile(r"C:\WINDOWS\system32\calc.exe")
 
     cv2.imshow("Imagem", imagem)
 
