@@ -57,8 +57,9 @@ def encontra_coordenadas_maos(
                     int(marcacao.z * WIDTH),
                 )
                 coordenadas.append((coord_x, coord_y, coord_z))
-                todas_maos.append(coordenadas)
+
             info_mao["coordenadas"] = coordenadas
+            todas_maos.append(info_mao)
             mp_desenho.draw_landmarks(img, marcacao_maos, mp_maos.HAND_CONNECTIONS)
 
     return img, todas_maos
