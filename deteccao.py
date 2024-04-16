@@ -63,6 +63,8 @@ def encontra_coordenadas_maos(
                 coordenadas.append((coord_x, coord_y, coord_z))
 
             info_mao["coordenadas"] = coordenadas
+            info_mao["lado"] = lado_mao.classification[0].label
+
             todas_maos_info.append(info_mao)
             mp_desenho.draw_landmarks(img, marcacao_maos, mp_maos.HAND_CONNECTIONS)
 
