@@ -127,6 +127,14 @@ while True:
                 calculadora_aberta = True
                 os.startfile(r"C:\WINDOWS\system32\calc.exe")
 
+            # Fechando o Bloco de Notas quando todos os dedos estiverem abaixados
+            if info_dedos_mao1 == [False, False, False, False] and bloco_notas_aberto:
+                bloco_notas_aberto = False
+                os.system("TASKKILL /F /IM notepad.exe")
+
+            # Fechando a janela de imagem do openCV com os dedos indicador e mínimo levantados
+            if info_dedos_mao1 == [True, False, False, True]:
+                break
     cv2.imshow("Imagem", imagem)
 
     # Verifica se a tecla ESC (código 27) foi pressionada
