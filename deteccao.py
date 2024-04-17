@@ -4,11 +4,22 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-# Definindo a largura e altura da imagem
-WIDTH = 1920
-HEIGHT = 1080
+# Definição de constantes
+WIDTH = 1920  # Largura da imagem
+HEIGHT = 1080  # Altura da imagem
+OFFSET = 50  # Offset para centralizar o teclado
+BRANCO = (255, 255, 255)  # Cor branca
+AZUL = (255, 0, 0)  # Cor azul
+VERDE = (0, 255, 0)  # Cor verde
+VERMELHO = (0, 0, 255)  # Cor vermelho
+PRETO = (0, 0, 0)  # Cor preto
+TECLAS = [
+    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+    ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+    ["Z", "X", "C", "V", "B", "N", "M", ",", ".", " "],
+]
 
-# Definindo uma variável que checa se o programa Bloco de Notas está aberto
+# Definindo variáveis de checagem para abrir e fechar os aplicativos
 bloco_notas_aberto = False
 chrome_aberto = False
 calculadora_aberta = False
@@ -95,6 +106,35 @@ def dedos_levantados(mao: dict[str, list[tuple[int, int, int]]]) -> list[bool]:
     return dedos
 
 
+def imprime_botoes(
+    img: np.ndarray,
+    posicao: tuple[int, int],
+    letra: str,
+    tamanho: int = 50,
+    cor_retangulo: tuple[int, int, int] = BRANCO,
+):
+
+    cv2.rectangle(
+        img,
+        posicao,
+        (posicao[0] + tamanho, posicao[1] + tamanho),
+        cor_retangulo,
+        cv2.FILLED,
+    )
+    cv2.rectangle(img, posicao, (posicao[0] + tamanho, posicao[1] + tamanho), AZUL, 1)
+    cv2.putText(
+        img,
+        letra,
+        (posicao[0] + 15, posicao[1] + 30),
+        cv2.FONT_HERSHEY_COMPLEX,
+        1,
+        PRETO,
+        2,
+    )
+
+    return img
+
+
 # Laço de repetição para capturar a imagem da câmera e exibir na tela
 while True:
     sucesso, imagem = camera.read()
@@ -110,8 +150,16 @@ while True:
     if len(todas_maos) == 1:
         info_dedos_mao1 = dedos_levantados(todas_maos[0])
 
+        if todas_maos[0]["lado"] == "Left":
+            for indice_linha, linha_teclado in enumerate(TECLAS):
+                for indice, letra in enumerate(linha_teclado):
+                    img = imprime_botoes(
+                        imagem,
+                        (OFFSET + indice * 80, OFFSET + indice_linha * 80),
+                        letra,
+                    )
         if todas_maos[0]["lado"] == "Right":
-            # Abrindo o Bloco de Notas, Chrome e Calculadora de acordo com a posição dos dedos
+            # Abrindo o Bloco de Notas, Chrome e Calculadora conforme a posição dos dedos
             if (
                 info_dedos_mao1 == [True, False, False, False]
                 and not bloco_notas_aberto
@@ -126,7 +174,9 @@ while True:
                         r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
                     )
                 except FileNotFoundError:
-                    os.startfile(r"C:\Program Files\Google\Chrome\Application\chrome.exe")
+                    os.startfile(
+                        r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+                    )
 
             if info_dedos_mao1 == [True, True, True, False] and not calculadora_aberta:
                 calculadora_aberta = True
