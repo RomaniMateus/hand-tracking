@@ -5,8 +5,8 @@ import mediapipe as mp
 import numpy as np
 
 # Definindo a largura e altura da imagem
-WIDTH = 640
-HEIGHT = 480
+WIDTH = 1920
+HEIGHT = 1080
 
 # Definindo uma variável que checa se o programa Bloco de Notas está aberto
 bloco_notas_aberto = False
@@ -120,9 +120,14 @@ while True:
                 os.startfile(r"C:\WINDOWS\system32\notepad.exe")
             if info_dedos_mao1 == [True, True, False, False] and not chrome_aberto:
                 chrome_aberto = True
-                os.startfile(
-                    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
-                )
+
+                try:
+                    os.startfile(
+                        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+                    )
+                except FileNotFoundError:
+                    os.startfile(r"C:\Program Files\Google\Chrome\Application\chrome.exe")
+
             if info_dedos_mao1 == [True, True, True, False] and not calculadora_aberta:
                 calculadora_aberta = True
                 os.startfile(r"C:\WINDOWS\system32\calc.exe")
